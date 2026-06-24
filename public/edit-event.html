@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Event</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h2>Edit Event</h2>
+
+    <form id="editForm">
+
+        <div class="mb-3">
+            <label>Event Title</label>
+            <input type="text" id="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Date</label>
+            <input type="date" id="date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Venue</label>
+            <input type="text" id="venue" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea id="description" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Update Event
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const eventId = params.get("id");
+
+async function loadEvent() {
+
+    const response = await fetch(
+        `http://localhost:5000/api/events/${eventId}`
+    );
+
+    const event = await response.json();
+
+    document.getElementById("title").value = event.title;
+    document.getElementById("date").value = event.date.split("T")[0];
+    document.getElementById("venue").value = event.venue;
+    document.getElementById("description").value = event.description;
+}
+
+document.getElementById("editForm").addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const updatedEvent = {
+        title: document.getElementById("title").value,
+        date: document.getElementById("date").value,
+        venue: document.getElementById("venue").value,
+        description: document.getElementById("description").value
+    };
+
+    await fetch(
+        `http://localhost:5000/api/events/${eventId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedEvent)
+        }
+    );
+
+    alert("Event Updated Successfully!");
+
+    window.location.href = "dashboard.html";
+});
+
+loadEvent();
+
+</script>
+
+</body>
+</html>
