@@ -61,6 +61,8 @@ async function loadEvents() {
 
     table.innerHTML = "";
 
+    const token = localStorage.getItem('token');
+
     events.forEach(event => {
 
         table.innerHTML += `
@@ -71,17 +73,12 @@ async function loadEvents() {
 
             <td>
 
-                <button
-                    class="btn btn-warning btn-sm"
-                    onclick="editEvent('${event._id}')">
-                    Edit
-                </button>
-
-                <button
-                    class="btn btn-danger btn-sm"
-                    onclick="deleteEvent('${event._id}')">
-                    Delete
-                </button>
+                ${token ? `
+                <button class="btn btn-warning btn-sm" onclick="editEvent('${event._id}')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteEvent('${event._id}')">Delete</button>
+                ` : `
+                <small class="text-muted">Login to manage</small>
+                `}
 
             </td>
         </tr>
@@ -93,8 +90,11 @@ async function deleteEvent(id) {
 
     if (!confirm("Delete this event?")) return;
 
+    const token = localStorage.getItem('token');
+
     await fetch(`/api/events/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
 
     loadEvents();
