@@ -9,6 +9,17 @@
 
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">University Events</a>
+        <div>
+            <a href="index.html" class="btn btn-light mx-1">Home</a>
+            <a href="events.html" class="btn btn-light mx-1">Events</a>
+            <a href="dashboard.html" class="btn btn-warning mx-1">Dashboard</a>
+        </div>
+    </div>
+</nav>
+
 <div class="container mt-5">
 
     <h2>Edit Event</h2>
@@ -51,7 +62,7 @@ const eventId = params.get("id");
 async function loadEvent() {
 
     const response = await fetch(
-        `http://localhost:5000/api/events/${eventId}`
+        `/api/events/${eventId}`
     );
 
     const event = await response.json();
@@ -74,7 +85,7 @@ document.getElementById("editForm").addEventListener("submit", async function(e)
     };
 
     await fetch(
-        `http://localhost:5000/api/events/${eventId}`,
+        `/api/events/${eventId}`,
         {
             method: "PUT",
             headers: {

@@ -41,7 +41,7 @@ const eventId = params.get("id");
 async function loadEvent() {
 
     const response = await fetch(
-        `http://localhost:5000/api/events/${eventId}`
+        `/api/events/${eventId}`
     );
 
     const event = await response.json();
